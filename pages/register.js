@@ -36,14 +36,12 @@ const Register = () => {
         </div>
 
         <form className="flex flex-col items-center gap-3 w-[500px] mt-5">
-
-        <input
+          <input
             type="text"
             placeholder="Display name"
             className="w-full h-14 bg-c5 rounded-xl outline-none border-none px-5 text-c3"
             autoComplete="off"
           />
-
 
           <input
             type="email"
@@ -61,7 +59,7 @@ const Register = () => {
             <span className="cursor-pointer">Forget Password ?</span>
           </div> */}
           <button className="mt-4 w-full h-14 rounded-xl outline-none text-base font-semibold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 ">
-          Sign Up
+            Sign Up
           </button>
         </form>
         <div className="flex justify-center gap-1 text-c3 mt-5">
@@ -78,4 +76,4 @@ const Register = () => {
   );
 };
 
-export default Register ;
+export default Register;
