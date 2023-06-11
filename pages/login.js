@@ -1,23 +1,23 @@
-import { auth } from "@/firebase/firebase";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { IoLogoGoogle, IoLogoFacebook } from "react-icons/io";
-import { signInWithEmailAndPassword } from "firebase/auth";
+// import { signInWithEmailAndPassword } from "firebase/auth";
 import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/router";
-
+import { auth } from "@/firebase/firebase";
 import {
+  signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
   FacebookAuthProvider,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
 } from "firebase/auth";
-
-import ToastMessage from "@/component/ToastMessage";
-import { toast } from "react-toastify";
 
 const gProvider = new GoogleAuthProvider();
 const fProvider = new FacebookAuthProvider();
+
+import ToastMessage from "@/component/ToastMessage";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const router = useRouter();
@@ -62,7 +62,7 @@ const Login = () => {
       toast.promise(
         async () => {
           // our logic
-          await sendPasswordResetEmail(auth, email)
+          await sendPasswordResetEmail(auth, email);
         },
         {
           pending: "Generating reset link",

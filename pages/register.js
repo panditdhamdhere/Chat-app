@@ -1,9 +1,86 @@
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { IoLogoGoogle, IoLogoFacebook } from "react-icons/io";
+import { profileColors } from "@/utils/constats";
+
+import { useAuth } from "@/context/authContext";
+import { useRouter } from "next/router";
+import { auth, db } from "@/firebase/firebase";
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  FacebookAuthProvider,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+
+const gProvider = new GoogleAuthProvider();
+const fProvider = new FacebookAuthProvider();
 
 const Register = () => {
-  return (
+  const router = useRouter();
+  const { currentUser, isLoading } = useAuth();
+
+  useEffect(() => {
+    if (!isLoading && currentUser) {
+      router.push("/");
+    }
+  }, [currentUser, isLoading]);
+
+  const signInWithGoogle = async () => {
+    try {
+      await signInWithPopup(auth, gProvider);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const signInWithFacebook = async () => {
+    try {
+      await signInWithPopup(auth, fProvider);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const displayName = e.target[0].value;
+    const email = e.target[1].value;
+    const password = e.target[2].value;
+    const colorIndex = Math.floor(Math.random() * profileColors.length);
+    try {
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        displayName,
+        email,
+        color: profileColors[colorIndex],
+      });
+
+      await setDoc(doc(db, "userChats", user.uid), {});
+
+      await updateProfile(user, {
+        displayName,
+      });
+
+      console.log(user);
+
+      router.push("/")
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return isLoading || (!isLoading && currentUser) ? (
+    "Loader..."
+  ) : (
     <div className="h-[100vh] flex justify-center items-center bg-c1">
       <div className="flex items-center flex-col">
         <div className="text-center">
@@ -14,14 +91,20 @@ const Register = () => {
         </div>
 
         <div className="flex items-center gap-2 w-full mt-10 mb-5">
-          <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-1/2 h-14 rounded-md cursor-pointer p-[1px]">
+          <div
+            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-1/2 h-14 rounded-md cursor-pointer p-[1px]"
+            onClick={signInWithGoogle}
+          >
             <div className="flex items-center justify-center gap-3 text-white font-semibold bg-c1 w-full h-full rounded-md">
               <IoLogoGoogle size={24} />
               <span>Login with Google</span>
             </div>
           </div>
 
-          <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-1/2 h-14 rounded-md cursor-pointer p-[1px]">
+          <div
+            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-1/2 h-14 rounded-md cursor-pointer p-[1px]"
+            onClick={signInWithFacebook}
+          >
             <div className="flex items-center justify-center gap-3 text-white font-semibold bg-c1 w-full h-full rounded-md">
               <IoLogoFacebook size={24} />
               <span>Login with Facebook</span>
@@ -35,7 +118,10 @@ const Register = () => {
           <span className="w-5 h-[1px] bg-c3"></span>
         </div>
 
-        <form className="flex flex-col items-center gap-3 w-[500px] mt-5">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col items-center gap-3 w-[500px] mt-5"
+        >
           <input
             type="text"
             placeholder="Display name"
@@ -72,7 +158,10 @@ const Register = () => {
           </Link>
         </div>
         <div className="mt-2">
-          <span className="text-orange-600">Build with 💙 By <span className="text-green-500 font-bold">Pandit</span></span>
+          <span className="text-orange-600">
+            Build with 💙 By{" "}
+            <span className="text-green-500 font-bold">Pandit</span>
+          </span>
         </div>
       </div>
     </div>
