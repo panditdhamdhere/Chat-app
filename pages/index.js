@@ -1,6 +1,7 @@
 import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
+import Loader from "@/component/Loader";
 
 const Home = () => {
   const router = useRouter();
@@ -13,15 +14,25 @@ const Home = () => {
     }
   }, [currentUser, isLoading]);
 
-  return (
+  return !currentUser ? (
+    <Loader />
+  ) : (
     // <div>
     //   <button onClick={signOut} className="text-black">
     //     Sign out
     //   </button>
     // </div>
     
-    <div>
-      
+    <div className="bg-c1 flex h-[100vh]">
+<div className="flex w-full shrink-0">
+<div>Left Nav</div>
+
+<div className="flex bg-c2 grow">
+  <div>Sidebar</div>
+  <div>chat</div>
+</div>
+
+</div>
     </div>
 
   );

@@ -13,11 +13,13 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 
+
 const gProvider = new GoogleAuthProvider();
 const fProvider = new FacebookAuthProvider();
 
 import ToastMessage from "@/component/ToastMessage";
 import { toast } from "react-toastify";
+import Loader from "@/component/Loader";
 
 const Login = () => {
   const router = useRouter();
@@ -79,7 +81,7 @@ const Login = () => {
   };
 
   return isLoading || (!isLoading && currentUser) ? (
-    "Loader..."
+    <Loader />
   ) : (
     <div className="h-[100vh] flex justify-center items-center bg-c1">
       <ToastMessage />
