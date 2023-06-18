@@ -14,11 +14,16 @@ const Home = () => {
   }, [currentUser, isLoading]);
 
   return (
+    // <div>
+    //   <button onClick={signOut} className="text-black">
+    //     Sign out
+    //   </button>
+    // </div>
+    
     <div>
-      <button onClick={signOut} className="text-black">
-        Sign out
-      </button>
+      
     </div>
+
   );
 };
 

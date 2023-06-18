@@ -1,8 +1,10 @@
 import { createContext, useEffect, useState } from "react";
 import { useContext } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/firebase/firebase";
+import { auth, db } from "@/firebase/firebase";
 import { signOut as authSignOut } from "firebase/auth";
+import { getDoc, doc } from "firebase/firestore";
+
 
 const UserContext = createContext();
 
@@ -15,27 +17,29 @@ export const UserProvider = ({ children }) => {
     setIsLoading(false);
   };
 
-  const authStateChanged = (user) => {
+  const authStateChanged = async (user) => {
     setIsLoading(true);
 
     if (!user) {
       clear();
       return;
     }
-    setCurrentUser(user);
+
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+
+    setCurrentUser(userDoc.data());
     setIsLoading(false);
 
     // console.log(user);
   };
 
-
   const signOut = () => {
-    authSignOut (auth).then(() => clear())
-  }
+    authSignOut(auth).then(() => clear());
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, authStateChanged);
-    return () => unsubscribe()
+    return () => unsubscribe();
   }, []);
 
   return (
@@ -45,7 +49,7 @@ export const UserProvider = ({ children }) => {
         setCurrentUser,
         isLoading,
         setIsLoading,
-        signOut
+        signOut,
       }}
     >
       {children}
