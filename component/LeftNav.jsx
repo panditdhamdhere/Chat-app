@@ -2,7 +2,8 @@ import React from "react";
 import { BiEdit } from "react-icons/bi";
 import Avatar from "./Avatar";
 import { useAuth } from "@/context/authContext";
-
+import Icon from "./Icon";
+import {FiPlus} from "react-icons/fi"
 
 
 const LeftNav = () => {
@@ -18,8 +19,12 @@ const {currentUser} = useAuth()
       </div>
 
       <div className="flex gap-5 flex-col items-center">
-        <span>Icon</span>
-        <span>Icon</span>
+      <Icon 
+      size="x-large"
+      className="bg-green-500 hover:bg-gray-600"
+      icon={<FiPlus size={24}/>}
+      onClick={() => {}}
+      />
       </div>
     </div>
   );
