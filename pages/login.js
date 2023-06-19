@@ -13,7 +13,6 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 
-
 const gProvider = new GoogleAuthProvider();
 const fProvider = new FacebookAuthProvider();
 
@@ -155,6 +154,12 @@ const Login = () => {
           >
             Register Now
           </Link>
+        </div>
+        <div className="mt-2">
+          <span className="text-orange-600">
+            Build with 💙 By{" "}
+            <span className="text-green-500 font-bold">Pandit</span>
+          </span>
         </div>
       </div>
     </div>
